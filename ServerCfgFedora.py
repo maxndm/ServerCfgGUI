@@ -125,16 +125,15 @@ class ServerConfig():
 
 		#############################self.directorytoc1 = "/etc/sysconfig/network-scripts/ifcfg-{}".format(self.cardname1)
 		#############################self.directorytoc2 = "/etc/sysconfig/network-scripts/ifcfg-{}".format(self.cardname2)
-		os.chdir("/etc/sysconfig/network-scripts")
-		#subprocess.call("ls")
 		self.ethports = []
+		os.mkdir("/etc/sysconfig/network-scripts")
+		os.chdir("/etc/sysconfig/network-scripts")
+		cmd = subprocess.Popen(["nmcli -t -f DEVICE c show --active"],stdout=subprocess.PIPE, shell=True)
+		(out,err) = cmd.communicate()
+		self.ethports = (out.decode("utf-8")).split("\n")
+		del self.ethports[-1]
 
-
-		for file in glob.glob("ifcfg*"):
-			self.ethports.append(file[6::])
-
-		#print(self.directorytoc2)
-		#print(self.directorytoc1)
+		#print(self.ethports)
 
 	def serverandgateway(self):
 		try:
@@ -257,7 +256,6 @@ class ServerConfig():
 		self.buttonproceed= Button(self.serverandgatewayframe,text="Proceed configuration",fg="white",bg="#1c1c1b",command=self.installingandconfiguring)
 		self.buttonproceed.place(x=470,y=250)
 
-
 	def sambaconf(self):
 
 
@@ -375,7 +373,6 @@ class ServerConfig():
 			self.sambaBASICinstall.configure(state="normal")
 			self.sambaDCinstall.configure(state="disabled")
 
-
 	def changevalueofsamba(self):
 
 		self.sambaDC = 0
@@ -470,8 +467,6 @@ class ServerConfig():
 		#print(self.filename)
 		self.filenameSV.set(self.filename)
 
-
-
 	def sambaconfigprocess(self):
 
 		if self.sambaBASIC == 1:
@@ -511,8 +506,6 @@ class ServerConfig():
 
 		elif self.sambaDC == 1:
 			pass
-
-
 
 	def internalnetwork(self):
 
@@ -814,8 +807,6 @@ class ServerConfig():
 			self.netmask1entry.configure(state="normal")
 			self.prefix1entry.configure(state="normal")
 
-
-
 	def disable_external_options(self):
 		self.externalAsDhcpVar = self.externalAsDhcpIV.get()
 
@@ -831,12 +822,6 @@ class ServerConfig():
 			self.subnetforexternalnetentry.configure(state="normal")
 			self.netmask1entry.configure(state="normal")
 			self.prefix1entry.configure(state="normal")
-
-
-
-
-
-
 
 	def dhcpdanddns(self):
 
@@ -956,7 +941,6 @@ class ServerConfig():
 		self.dhcprangetoentry = Entry(self.dhcpdanddnsframe,textvariable=self.dhcprangetoSV,width=20,background="#464a48",font="Arial 12").place(x=200,y=250)
 		self.dhcprangetoSV.set(self.dhcprangeto)
 
-
 	def installingandconfiguring(self):
 
 
@@ -1032,7 +1016,6 @@ class ServerConfig():
 		self.DHCPconfig()
 		self.sambaconfigprocess()
 		self.reboot()
-
 
 	def NICconfig(self): #########################################################################################################################################################################
 		print("___________________________________SETTING UP NETWORK CARDS..._____________________________")
@@ -1116,7 +1099,6 @@ class ServerConfig():
 			resolvfile.write("nameserver 8.8.8.8\n")
 
 		print("Done..........")
-
 
 	def DNSconfig(self):####################################################################################################################################################################x
 
@@ -1240,8 +1222,6 @@ class ServerConfig():
 			rev.write(("4	IN	PTR	{}.{}.\n").format(self.servername,self.dnsname))
 
 		print("DNS-DONE...")
-
-
 
 	def DHCPconfig(self):
 
