@@ -126,7 +126,8 @@ class ServerConfig():
 		#############################self.directorytoc1 = "/etc/sysconfig/network-scripts/ifcfg-{}".format(self.cardname1)
 		#############################self.directorytoc2 = "/etc/sysconfig/network-scripts/ifcfg-{}".format(self.cardname2)
 		self.ethports = []
-		os.mkdir("/etc/sysconfig/network-scripts")
+		if not os.path.isdir("/etc/sysconfig/network-scripts"):
+			os.mkdir("/etc/sysconfig/network-scripts")
 		os.chdir("/etc/sysconfig/network-scripts")
 		cmd = subprocess.Popen(["nmcli -t -f DEVICE c show --active"],stdout=subprocess.PIPE, shell=True)
 		(out,err) = cmd.communicate()
