@@ -1000,7 +1000,7 @@ class ServerConfig():
 			pass
 
 		if self.dhcpi == 1:
-			subprocess.call(["yum","install","dhcp","-y"])
+			subprocess.call(["dnf","-y","install","dhcp-server"])
 
 		if self.dnsi == 1:
 			subprocess.call(["yum","install","bind*","bind-utils","-y"])
